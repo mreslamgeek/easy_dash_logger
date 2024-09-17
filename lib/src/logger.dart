@@ -1,8 +1,12 @@
 part of '../easy_dash_logger.dart';
 
-// Conditional imports
-
+/// Extension on [Object] to provide logging functionality.
 extension ColoredLog on Object? {
+  /// Prints a log message with the specified [name], [color], and optional [bgColor].
+  ///
+  /// The [name] defaults to 'DEBUG_LOG'.
+  /// The [color] defaults to [ANSICOLOR.yellow].
+  /// The [bgColor] is optional.
   void printLog({
     String name = 'DEBUG_LOG',
     ANSICOLOR color = ANSICOLOR.yellow,
@@ -10,7 +14,6 @@ extension ColoredLog on Object? {
   }) {
     final String resetColor = ANSICOLOR.reset.colors;
 
-    // Replace newline characters with ANSI escape sequence for newline
     final formattedMessage = toString().replaceAll(
       '\n',
       '$resetColor\n${bgColor == null ? resetColor : bgColor.colors[1]}${color.colors[0]}',
@@ -19,11 +22,9 @@ extension ColoredLog on Object? {
     final logMessage =
         '${bgColor == null ? resetColor : bgColor.colors[1]}${color.colors[0]}$formattedMessage$resetColor';
 
-    if (isDebugMode()) {
-      // Use developer.log in debug mode
+    if (isFlutter()) {
       dev.log(logMessage, name: name);
     } else {
-      // Use print in release mode
       print(logMessage);
     }
   }

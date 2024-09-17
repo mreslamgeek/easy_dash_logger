@@ -1,5 +1,6 @@
 part of '../easy_dash_logger.dart';
 
+/// Enum representing ANSI color codes.
 enum ANSICOLOR {
   reset,
   black,
@@ -21,6 +22,7 @@ enum ANSICOLOR {
   brightCyan,
   brightMagenta;
 
+  /// Returns the ANSI color codes for the enum value.
   dynamic get colors => switch (this) {
         ANSICOLOR.reset => '\x1B[0m',
         ANSICOLOR.black => ['\x1B[30m', '\x1B[40m'],
