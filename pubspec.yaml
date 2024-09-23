@@ -1,11 +1,11 @@
 name: easy_dash_logger
 description: "A versatile logging package for Dart and Flutter applications."
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/mreslamgeek/easy_dash_logger
 repository: https://github.com/mreslamgeek/easy_dash_logger
 
 environment:
-  sdk: ">=3.4.3 <4.0.0"
+  sdk: ">=2.17.0 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -16,7 +16,7 @@ dev_dependencies:
   flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter
-  test: ^1.25.2
+  test: 
 
 flutter:
   uses-material-design: true

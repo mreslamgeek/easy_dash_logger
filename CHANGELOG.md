@@ -1,3 +1,6 @@
+## [1.0.1] - 2024-09-23
+### Added
+- Support older dart versions.
 ## [1.0.0] - 2024-09-18
 ### Added
 - Platform-specific logging for Flutter and Dart environments.
