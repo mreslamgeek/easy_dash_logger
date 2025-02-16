@@ -1,3 +1,6 @@
+## [1.0.2] - 2024-02-16
+### Updated
+- Package Version.
 ## [1.0.1] - 2024-09-23
 ### Added
 - Support older dart versions.
