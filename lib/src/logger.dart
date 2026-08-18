@@ -4,28 +4,49 @@ part of '../easy_dash_logger.dart';
 extension ColoredLog on Object? {
   /// Prints a log message with the specified [name], [color], and optional [bgColor].
   ///
-  /// The [name] defaults to 'DEBUG_LOG'.
-  /// The [color] defaults to [ANSICOLOR.yellow].
-  /// The [bgColor] is optional.
+  /// Nothing is emitted — and no string is built — unless
+  /// [EasyDashLoggerConfig.isLoggingEnabled] is `true`. Logs are shown in debug
+  /// builds only by default; use [EasyDashLoggerConfig.configure] with
+  /// `showLogsInRelease` / `showLogsInProfile` before the app starts to change
+  /// that.
+  ///
+  /// [name] defaults to [EasyDashLoggerConfig.defaultName] ('DEBUG_LOG').
+  /// [color] defaults to [EasyDashLoggerConfig.defaultColor] (yellow).
+  /// [bgColor] defaults to [EasyDashLoggerConfig.defaultBgColor] (none).
   void printLog({
-    String name = 'DEBUG_LOG',
-    ANSICOLOR color = ANSICOLOR.yellow,
+    String? name,
+    ANSICOLOR? color,
     ANSICOLOR? bgColor,
   }) {
-    final String resetColor = ANSICOLOR.reset.colors;
+    if (!EasyDashLoggerConfig.isLoggingEnabled) return;
 
-    final formattedMessage = toString().replaceAll(
-      '\n',
-      '$resetColor\n${bgColor == null ? resetColor : bgColor.colors[1]}${color.colors[0]}',
-    );
+    final String logName = name ?? EasyDashLoggerConfig.defaultName;
+    final String message = toString();
+    final String logMessage;
 
-    final logMessage =
-        '${bgColor == null ? resetColor : bgColor.colors[1]}${color.colors[0]}$formattedMessage$resetColor';
+    if (EasyDashLoggerConfig.useColors) {
+      final String resetColor = ANSICOLOR.reset.colors;
+      final String fgColor =
+          (color ?? EasyDashLoggerConfig.defaultColor).colors[0];
+      final ANSICOLOR? background = bgColor ?? EasyDashLoggerConfig.defaultBgColor;
+      final String bg = background == null ? resetColor : background.colors[1];
 
-    if (isFlutter()) {
-      dev.log(logMessage, name: name);
+      final formattedMessage =
+          message.replaceAll('\n', '$resetColor\n$bg$fgColor');
+
+      logMessage = '$bg$fgColor$formattedMessage$resetColor';
     } else {
-      print(logMessage);
+      logMessage = message;
+    }
+
+    final LogOutput? output = EasyDashLoggerConfig.output;
+    if (output != null) {
+      output(logMessage, logName);
+    } else if (isFlutter() && !kLoggerIsWeb) {
+      dev.log(logMessage, name: logName);
+    } else {
+      // ignore: avoid_print
+      print('[$logName] $logMessage');
     }
   }
 }
